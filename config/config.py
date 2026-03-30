@@ -8,7 +8,7 @@ def get_config():
 
 def second_get_config():
     return {
-        "catalog": "gdp_pii_preprod",
+        "catalog": "gdp_pii_prod",
         "schema": "customer360",
         "table": "audit_table"
     }
