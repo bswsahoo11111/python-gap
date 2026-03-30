@@ -43,4 +43,6 @@ def second_query(
     
 res=second_query()
 print(res)
+res=first_query()
+print(res)
 
