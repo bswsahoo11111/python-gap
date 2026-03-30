@@ -46,4 +46,5 @@ def main(args):
 
 if __name__ == "__main__":
     # Databricks passes job parameters as sys.argv[1:]
-    main(sys.argv[1:])
+    #main(sys.argv[1:])
+    main(sys.argv[:])
