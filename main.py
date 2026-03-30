@@ -1,50 +1,33 @@
 import sys
-from demodule import upsert   # import your query functions
-# from config import config     # import your config module
-
-from config.config import get_config
-config = get_config()
-
-from config.config import second_get_config
-second_config = second_get_config()
+import importlib
 
 def main(args):
     """
-    Entry point for Databricks job.
-    Args are passed in from Databricks job parameters.
+    Args example: ["module","submodule","upsert"]
+    - folder_name = "module"
+    - sub_folder  = "submodule"
+    - operation   = "upsert"
     """
-    # Unpack job parameters
-    # Example: ["gdp_pii_preprod","customer360","audit_table","select"]
-    #target_catalog=config["catalog"], target_schema=config["schema"], target_table=config["table"], #operation = args
-    "folder_name","sub_folder","operation"
+    folder_name, sub_folder, operation = args
 
-    # # Build a config dictionary dynamically
-    # cfg = {
-    #     "catalog": target_catalog,
-    #     "schema": target_schema,
-    #     "table": target_table
-    # }
+    # Build the module path dynamically
+    module_path = f"{folder_name}.{sub_folder}.{operation}"
 
-    # Dispatch based on operation
-    # if operation == "select":
-    #     query = upsert.first_query(
-    #         target_catalog=config["catalog"],
-    #         target_schema=config["schema"],
-    #         target_table=config["table"]
-    #     )
-    # elif operation == "insert":
-    #     query = upsert.second_query(
-    #         target_catalog=second_config["catalog"],
-    #         target_schema=second_config["schema"],
-    #         target_table=second_config["table"]
-    #     )
-    # else:
-    #     raise ValueError(f"Unsupported operation: {operation}")
+    try:
+        # Dynamically import the module
+        mod = importlib.import_module(module_path)
 
-    # print("Generated SQL:")
-    # print(query)
+        # Call a function inside upsert.py, e.g. first_query()
+        if hasattr(mod, "first_query"):
+            query = mod.first_query()
+            print("Generated SQL:")
+            print(query)
+        else:
+            print(f"No function 'first_query' found in {module_path}")
+
+    except ModuleNotFoundError as e:
+        print(f"Could not import {module_path}: {e}")
 
 if __name__ == "__main__":
     # Databricks passes job parameters as sys.argv[1:]
-    #main(sys.argv[1:])
-    main(sys.argv[:])
+    main(sys.argv[1:])
