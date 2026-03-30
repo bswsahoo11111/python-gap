@@ -8,10 +8,10 @@ def main(args):
     - sub_folder  = "submodule"
     - operation   = "upsert"
     """
-    folder_name, sub_folder, operation = args
+    folder_name, operation = args
 
     # Build the module path dynamically
-    module_path = f"{folder_name}.{sub_folder}.{operation}"
+    module_path = f"{folder_name}.{operation}"
 
     try:
         # Dynamically import the module
